@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
 import { WebSocketServer } from "ws";
+import { startMediasoupWorker } from "./mediasoup-worker";
 
 const app = express();
 const server = http.createServer(app);
@@ -8,6 +9,7 @@ const wss = new WebSocketServer({ server });
 
 const PORT = 8000;
 
+startMediasoupWorker();
 wss.on("connection", (ws) => {
   console.log("✅ New client connected!");
 
