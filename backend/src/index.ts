@@ -3,22 +3,28 @@ import http from "http";
 import { WebSocketServer } from "ws";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
+const PORT = 8000;
+
 wss.on("connection", (ws) => {
-  console.log("New Client Connected");
+  console.log("✅ New client connected!");
 
   ws.on("message", (message) => {
     console.log(`Received message => ${message}`);
+    ws.send(`Echo: ${message}`);
+  });
+
+  ws.on("close", () => {
+    console.log("❌ Client disconnected");
+  });
+
+  ws.on("error", (error) => {
+    console.error("WebSocket error:", error);
   });
 });
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+server.listen(PORT, () => {
+  console.log(`🚀 Backend server is running on http://localhost:${PORT}`);
 });
